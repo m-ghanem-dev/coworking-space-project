@@ -11,3 +11,4 @@ spec:
     protocol: TCP
     port: 5153
     targetPort: 5153
+    nodePort: 30008 # Port on the node to expose to load balancer. Security group of node must accept traffic on that port from load balancer.
