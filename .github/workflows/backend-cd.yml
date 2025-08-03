@@ -1,0 +1,46 @@
+name: Backend CD
+
+on:
+  workflow_call:
+    secrets:
+      AWS_ACCESS_KEY_ID:
+        required: true
+      AWS_SECRET_ACCESS_KEY:
+        required: true
+  workflow_dispatch:
+
+jobs:
+  deploy:
+      name: Deploy to EKS
+      runs-on: ubuntu-latest
+      env:
+        REPO_URL: 576165291816.dkr.ecr.eu-central-1.amazonaws.com
+        IMAGE_NAME: backend
+        IMAGE_TAG: ${{ github.sha }}
+        CLUSTER_NAME: movie-picture-eks-cluster
+      steps:
+      - uses: actions/checkout@v4
+    
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-central-1
+      
+      - name: Debug AWS Identity
+        run: aws sts get-caller-identity
+      
+      - name: Configure Kubeconfig
+        run: aws eks update-kubeconfig --name ${CLUSTER_NAME} --region eu-central-1
+
+      - name: Deploy Docker Image to Amazon EKS
+        working-directory: backend/deployment
+        env:
+          IMAGE_TAG: ${{ github.sha }}
+          REPO_NAME: backend
+          REPO_URL: 576165291816.dkr.ecr.eu-central-1.amazonaws.com
+          IMAGE_NAME: backend
+        run: |
+          kustomize edit set image backend=${REPO_URL}/${IMAGE_NAME}:${IMAGE_TAG}
+          kustomize build | kubectl apply -f -

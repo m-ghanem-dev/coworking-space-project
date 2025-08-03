@@ -1,0 +1,51 @@
+name: Backend CI
+
+on:
+  workflow_call:
+    secrets:
+      AWS_ACCESS_KEY_ID:
+        required: true
+      AWS_SECRET_ACCESS_KEY:
+        required: true
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build Docker Image
+    env:
+      REPO_URL: 576165291816.dkr.ecr.eu-central-1.amazonaws.com
+      IMAGE_NAME: backend
+      IMAGE_TAG: ${{ github.sha }}
+    
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-central-1
+      
+      - name: Debug AWS Identity
+        run: aws sts get-caller-identity
+      
+      - name: Login to Amazon ECR
+        run: |
+          aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin ${REPO_URL}
+
+      - name: Build Image
+        working-directory: backend
+        env:
+          IMAGE_TAG: ${{ github.sha }}
+          REPO_NAME: backend
+        run: |
+          docker build --tag ${REPO_URL}/${IMAGE_NAME}:${IMAGE_TAG} .
+        
+      - name: Deploy Image to ECS
+        env:
+          IMAGE_TAG: ${{ github.sha }}
+          REPO_NAME: backend
+        run: |
+            docker push ${REPO_URL}/${IMAGE_NAME}:${IMAGE_TAG}
