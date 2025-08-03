@@ -6,7 +6,7 @@ FROM public.ecr.aws/docker/library/python:3.10-alpine
 WORKDIR /app
 
 # Copy the current directory contents to the container at /app
-COPY /backend/ /app
+COPY . /app
 
 # Install dependencies from requirements.txt
 RUN pip install --no-cache-dir -r /app/requirements.txt
