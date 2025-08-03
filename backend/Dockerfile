@@ -11,8 +11,8 @@ COPY . /app
 # Install dependencies from requirements.txt
 RUN pip install --no-cache-dir -r /app/analytics/requirements.txt
 
-# Expose port 5000
-EXPOSE 5000
+# Expose port 5153
+EXPOSE 5153
 
 # Run the application when the container starts
 CMD ["python", "app/app.py"]
