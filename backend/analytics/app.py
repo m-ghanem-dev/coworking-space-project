@@ -13,11 +13,7 @@ from config import app, db
 port_number = int(os.environ.get("APP_PORT", 5153))
 sql_files = [ "db/1_create_tables.sql", "db/2_seed_users.sql","db/3_seed_tokens.sql"]
 
-def run_sql_files_once(file_paths, marker_path=".init_sql_applied"):
-    if os.path.exists(marker_path):
-        app.logger.info("Init SQL already applied. Skipping.")
-        return
-
+def run_sql_files_once(file_paths):
     with app.app_context():
         try:
             for path in file_paths:
@@ -28,9 +24,6 @@ def run_sql_files_once(file_paths, marker_path=".init_sql_applied"):
 
             db.session.commit()
 
-            # Create the marker file
-            with open(marker_path, "w") as marker:
-                marker.write("applied\n")
         except Exception as e:
             db.session.rollback()
             app.logger.error(f"Failed during SQL execution: {e}")
