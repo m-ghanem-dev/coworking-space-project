@@ -10,14 +10,19 @@ on:
   workflow_dispatch:
 
 jobs:
+  postgres-deploy:
+    uses: ./.github/workflows/postgres-deploy.yml
+    secrets:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   backend-ci:
     uses: ./.github/workflows/backend-ci.yml
     secrets:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#  backend-cd:
-#    uses: ./.github/workflows/backend-cd.yml
-#    needs: backend-ci
-#    secrets:
-#        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  backend-cd:
+     uses: ./.github/workflows/backend-cd.yml
+     needs: backend-ci
+     secrets:
+         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
