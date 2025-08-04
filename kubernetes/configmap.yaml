@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: configMap
+  name: configmap
 data:
   DB_NAME: mydatabase
   DB_USER: myuser

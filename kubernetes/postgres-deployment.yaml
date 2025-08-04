@@ -16,7 +16,7 @@ spec:
         image: postgres:latest
         envFrom:
         - configMapRef:
-            name: configMap
+            name: configmap
         env:
         - name: DB_PASSWORD
           valueFrom:
