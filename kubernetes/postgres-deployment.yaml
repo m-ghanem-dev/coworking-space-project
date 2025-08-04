@@ -21,7 +21,7 @@ spec:
         - name: DB_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: dbPassword
+              name: secretsmap
               key: DB_PASSWORD
         ports:
         - containerPort: 5432
