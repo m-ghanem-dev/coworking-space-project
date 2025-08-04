@@ -37,3 +37,4 @@ jobs:
             kubectl apply -f pv.yaml
             kubectl apply -f pvc.yaml
             kubectl apply -f postgres-deployment.yaml
+            kubectl apply -f postgres-service.yaml
