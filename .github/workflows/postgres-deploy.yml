@@ -1,4 +1,4 @@
-name: Backend CD
+name: Postgres Deploy
 
 on:
   workflow_call:
@@ -14,9 +14,6 @@ jobs:
       name: Deploy to EKS
       runs-on: ubuntu-latest
       env:
-        REPO_URL: 576165291816.dkr.ecr.eu-central-1.amazonaws.com
-        IMAGE_NAME: backend
-        IMAGE_TAG: ${{ github.sha }}
         CLUSTER_NAME: coworking-space-project
       steps:
       - uses: actions/checkout@v4
@@ -34,16 +31,9 @@ jobs:
       - name: Configure Kubeconfig
         run: aws eks update-kubeconfig --name ${CLUSTER_NAME} --region eu-central-1
 
-      - name: Deploy Docker Image to Amazon EKS
+      - name: Apply kubernetes manifests
         working-directory: kubernetes
-        env:
-          IMAGE_TAG: ${{ github.sha }}
-          REPO_NAME: backend
-          REPO_URL: 576165291816.dkr.ecr.eu-central-1.amazonaws.com
-          IMAGE_NAME: backend
-        # 🔄 Update the image reference for 'backend' in kustomization.yaml using the latest built image.
-        # Then build and apply only the resources explicitly listed in the kustomization.yaml file.
-        # This ensures the deployment reflects the updated image and applies the correct ConfigMaps, Secrets, Services, etc.
         run: |
-          kustomize edit set image backend=${REPO_URL}/${IMAGE_NAME}:${IMAGE_TAG}
-          kustomize build | kubectl apply -f -
+            kubectl apply -f pv.yaml
+            kubectl apply -f pvc.yaml
+            kubectl apply -f postgres-deployment.yaml
