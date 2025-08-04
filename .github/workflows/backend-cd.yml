@@ -41,6 +41,9 @@ jobs:
           REPO_NAME: backend
           REPO_URL: 576165291816.dkr.ecr.eu-central-1.amazonaws.com
           IMAGE_NAME: backend
+        # 🔄 Update the image reference for 'backend' in kustomization.yaml using the latest built image.
+        # Then build and apply only the resources explicitly listed in the kustomization.yaml file.
+        # This ensures the deployment reflects the updated image and applies the correct ConfigMaps, Secrets, Services, etc.
         run: |
           kustomize edit set image backend=${REPO_URL}/${IMAGE_NAME}:${IMAGE_TAG}
           kustomize build | kubectl apply -f -
