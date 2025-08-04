@@ -6,4 +6,4 @@ data:
   DB_NAME: mydatabase
   DB_USER: myuser
   DB_HOST: <ENTER YOUR DB HOST HERE>
-  DB_PORT: 5432
+  DB_PORT: "5432"
