@@ -5,5 +5,5 @@ metadata:
 data:
   DB_NAME: mydatabase
   DB_USERNAME: myuser
-  DB_HOST: <ENTER YOUR DB HOST HERE>
+  DB_HOST: postgresql-service.default.svc.cluster.local # FQDN: <service-name>.<namespace>.svc.cluster.local
   DB_PORT: "5432"
