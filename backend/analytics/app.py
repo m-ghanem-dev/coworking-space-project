@@ -37,6 +37,7 @@ def health_check():
 @app.route("/readiness_check")
 def readiness_check():
     try:
+        run_sql_files_once(sql_files)
         count = db.session.execute(text("SELECT COUNT(*) FROM tokens")).scalar()
     except Exception as e:
         app.logger.error(e)
