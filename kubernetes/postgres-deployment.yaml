@@ -14,15 +14,22 @@ spec:
       containers:
       - name: postgresql
         image: postgres:latest
-        envFrom:
-        - configMapRef:
-            name: configmap
         env:
-        - name: DB_PASSWORD
+        - name: POSTGRES_PASSWORD
           valueFrom:
             secretKeyRef:
               name: secretsmap
               key: DB_PASSWORD
+        - name: POSTGRES_DB
+          valueFrom:
+            configMapKeyRef:
+              name: configmap
+              key: DB_NAME
+        - name: POSTGRES_USER
+          valueFrom:
+            configMapKeyRef:
+              name: configmap
+              key: DB_USERNAME
         ports:
         - containerPort: 5432
         volumeMounts:

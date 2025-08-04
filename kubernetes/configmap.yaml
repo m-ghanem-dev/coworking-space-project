@@ -4,6 +4,6 @@ metadata:
   name: configmap
 data:
   DB_NAME: mydatabase
-  DB_USER: myuser
+  DB_USERNAME: myuser
   DB_HOST: <ENTER YOUR DB HOST HERE>
   DB_PORT: "5432"
