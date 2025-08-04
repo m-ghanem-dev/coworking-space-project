@@ -9,9 +9,13 @@ from random import randint
 
 from config import app, db
 
-
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 port_number = int(os.environ.get("APP_PORT", 5153))
-sql_files = [ "db/1_create_tables.sql", "db/2_seed_users.sql","db/3_seed_tokens.sql"]
+sql_files = [
+    os.path.join(BASE_DIR, "db/1_create_tables.sql"),
+    os.path.join(BASE_DIR, "db/2_seed_users.sql"),
+    os.path.join(BASE_DIR, "db/3_seed_tokens.sql")
+]
 
 def run_sql_files_once(file_paths):
     with app.app_context():
