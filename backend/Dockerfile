@@ -15,5 +15,4 @@ RUN pip install --no-cache-dir -r /app/analytics/requirements.txt
 EXPOSE 5153
 
 # Run the application when the container starts
-CMD ["python", "app/app.py"]
-CMD python app.py
+CMD ["python", "analytics/app.py"]
